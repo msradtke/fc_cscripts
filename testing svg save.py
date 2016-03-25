@@ -5,10 +5,13 @@ view = App.ActiveDocument.addObject('Drawing::FeatureViewPart','View100')
 selectedObject = FreeCADGui.Selection.getSelection()[0]
 
 xBoundLength = selectedObject.Shape.BoundBox.XLength
+print(xBoundLength)
+print(yBoundLength)
 yBoundLength = selectedObject.Shape.BoundBox.YLength
 xPlacement = selectedObject.Placement.Base.x
+print(xPlacement)
 yPlacement = selectedObject.Placement.Base.y
-
+print(yPlacement)
 #FreeCADGui.ActiveDocument.getObject(page.Name).HintOffsetX = selectedObject.Placement.Base.x
 #FreeCADGui.ActiveDocument.getObject(page.Name).HintOffsetY = selectedObject.Placement.Base.y
 #FreeCADGui.ActiveDocument.getObject(page.Name).HintScale = 1
@@ -23,6 +26,7 @@ height = yBoundLength * scale
 width = xBoundLength * scale
 
 if yBoundLength > xBoundLength:
+	print("yBoundLength is great")
 	desiredImageSize = pageWidth - (margin * 2)
 	greaterLength = yBoundLength
 	lesserLength = xBoundLength
@@ -30,6 +34,9 @@ if yBoundLength > xBoundLength:
 	centerSpace = (pageWidth - width) / 2
 	yViewPlacement = (yPlacement * scale) + margin + height
 	xViewPlacement = -(xPlacement * scale) + centerSpace
+	#print(xPlacement)
+	if xPlacement < 0:
+		xViewPlacement += width
 else:
 	desiredImageSize = pageHeight - (margin * 2)
 	greaterLength = xBoundLength
@@ -47,6 +54,4 @@ view.Scale = scale
 view.X = xViewPlacement
 view.Y = yViewPlacement
 page.addObject(view)
-
-
 
