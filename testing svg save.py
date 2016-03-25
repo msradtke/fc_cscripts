@@ -1,12 +1,11 @@
-page = App.ActiveDocument.addObject('Drawing::FeaturePage','Page100')
+page = App.ActiveDocument.addObject('Drawing::FeaturePage')
 page.Template = r'C:\Users\MICK\Dropbox\Mick\Drawings\Templates\500x500 Page.svg'
 
-view = App.ActiveDocument.addObject('Drawing::FeatureViewPart','View100')
+view = App.ActiveDocument.addObject('Drawing::FeatureViewPart')
 selectedObject = FreeCADGui.Selection.getSelection()[0]
+fileLocation = r"C:/Users/MICK/Dropbox/Mick/Drawings/Drawing Test/"
 
 xBoundLength = selectedObject.Shape.BoundBox.XLength
-print(xBoundLength)
-print(yBoundLength)
 yBoundLength = selectedObject.Shape.BoundBox.YLength
 xPlacement = selectedObject.Placement.Base.x
 print(xPlacement)
@@ -20,10 +19,7 @@ pageWidth = 500
 pageHeight = 500
 margin = 10
 
-scale = desiredImageSize / greaterLength
 
-height = yBoundLength * scale
-width = xBoundLength * scale
 
 if yBoundLength > xBoundLength:
 	print("yBoundLength is great")
@@ -31,6 +27,8 @@ if yBoundLength > xBoundLength:
 	greaterLength = yBoundLength
 	lesserLength = xBoundLength
 	scale = desiredImageSize / greaterLength
+	height = yBoundLength * scale
+	width = xBoundLength * scale
 	centerSpace = (pageWidth - width) / 2
 	yViewPlacement = (yPlacement * scale) + margin + height
 	xViewPlacement = -(xPlacement * scale) + centerSpace
@@ -42,6 +40,8 @@ else:
 	greaterLength = xBoundLength
 	lesserLength = yBoundLength
 	scale = desiredImageSize / greaterLength
+	height = yBoundLength * scale
+	width = xBoundLength * scale
 	centerSpace = (pageHeight - height) / 2
 	yViewPlacement = (yPlacement * scale) + centerSpace + height
 	xViewPlacement = -(xPlacement * scale) + margin
@@ -55,3 +55,11 @@ view.X = xViewPlacement
 view.Y = yViewPlacement
 page.addObject(view)
 
+App.ActiveDocument.recompute()
+
+filePath = fileLocation + view.Label + ".svg"
+
+PageFile = open(page.PageResult,'r')
+OutFile = open(filePath,'w')
+OutFile.write(PageFile.read())
+del OutFile,PageFile
