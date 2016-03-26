@@ -8,10 +8,10 @@ selectedObject = FreeCADGui.Selection.getSelection()[0]
 fileLocation = os.environ['USERPROFILE'] + r"/Dropbox/Mick/Drawings/Drawing Test/"
 
 xBoundLength = selectedObject.Shape.BoundBox.XLength
-yBoundLength = selectedObject.Shape.BoundBox.YLength
+zBoundLength = selectedObject.Shape.BoundBox.ZLength
 xPlacement = selectedObject.Placement.Base.x
 print(xPlacement)
-yPlacement = selectedObject.Placement.Base.y
+zPlacement = selectedObject.Placement.Base.z
 print(yPlacement)
 #FreeCADGui.ActiveDocument.getObject(page.Name).HintOffsetX = selectedObject.Placement.Base.x
 #FreeCADGui.ActiveDocument.getObject(page.Name).HintOffsetY = selectedObject.Placement.Base.y
@@ -23,18 +23,18 @@ margin = 10
 
 
 
-if yBoundLength > xBoundLength:
+if zBoundLength > xBoundLength:
 	print("yBoundLength is greater")
 	desiredImageSize = pageWidth - (margin * 2)
-	greaterLength = yBoundLength
+	greaterLength = zBoundLength
 	lesserLength = xBoundLength
 	scale = desiredImageSize / greaterLength
-	height = yBoundLength * scale
+	height = zBoundLength * scale
 	width = xBoundLength * scale
 	xMin = selectedObject.Shape.BoundBox.XMin
-	yMax = selectedObject.Shape.BoundBox.YMax
+	zMax = selectedObject.Shape.BoundBox.YMax
 	centerSpace = (pageWidth - width) / 2
-	yViewPlacement = yPlacement * scale + (yMax - yPlacement )* scale + margin
+	yViewPlacement = zPlacement * scale + (zMax - zPlacement )* scale + margin
 	xViewPlacement = -xPlacement * scale + (xPlacement - xMin) * scale + centerSpace
 	print(xPlacement)
 	if xPlacement < 0:
@@ -42,19 +42,20 @@ if yBoundLength > xBoundLength:
 else:
 	desiredImageSize = pageHeight - (margin * 2)
 	greaterLength = xBoundLength
-	lesserLength = yBoundLength
+	lesserLength = zBoundLength
 	scale = desiredImageSize / greaterLength
-	height = yBoundLength * scale
+	height = zBoundLength * scale
 	width = xBoundLength * scale
 	xMin = selectedObject.Shape.BoundBox.XMin
-	yMax = selectedObject.Shape.BoundBox.YMax
+	zMax = selectedObject.Shape.BoundBox.ZMax
 	centerSpace = (pageHeight - height) / 2
-	yViewPlacement = yPlacement * scale + (yMax - yPlacement )* scale + centerSpace
+	yViewPlacement = zPlacement * scale + (zMax - zPlacement )* scale + centerSpace
 	xViewPlacement = -xPlacement * scale + (xPlacement - xMin) * scale + margin
 
 
 view.Source = selectedObject
-view.Direction = (0.0,0.0,1.0)
+view.Direction = (1.0,-1.0,1.0)
+view.Rotation = 60
 view.Scale = scale
 
 view.X = xViewPlacement
